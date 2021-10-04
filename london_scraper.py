@@ -1,5 +1,5 @@
-'''
-File: longon_scraper.py
+"""
+File: london_scraper.py
 Project: scrape_london_marathon
 Created Date: 7-09-2021
 Author: Michael Walshe
@@ -12,7 +12,7 @@ Copyright (c) 2021 Amadeus Software Ltd
 HISTORY:
 Date      	By	Comments
 ----------	---	---------------------------------------------------------
-'''
+"""
 
 
 # Setting up required libraries
@@ -22,7 +22,7 @@ import requests
 import re  # regex
 import concurrent.futures  # to allow multithreading
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
-from multiprocessing import Pool, cpu_count  # to allow multiprocessing
+# from multiprocessing import Pool, cpu_count  # to allow multiprocessing
 
 
 def get_results_new(url, sex, year):
@@ -96,13 +96,13 @@ def get_results_old(url, sex, year):
         for cell in row.find_all("td"):
             # Check if cell has alt text, if so use that as data
             alt_text = cell.find("span")
-            if alt_text != None:
+            if alt_text is not None:
                 cell = alt_text["title"]
             else:
                 cell = cell.text
             row_data.append(cell)
 
-        # If the row isn't empty, then create a dict of the row to create datafram from
+        # If the row isn't empty, then create a dict of the row to create dataframe from
         if len(row_data) > 0 and year != 2014:
             data_item = {
                 "Place (Overall)": row_data[0],
@@ -142,9 +142,9 @@ def get_results(url):
     # Function choose what results func to apply
     # Used to allow single function for pool.map
     year = int(
-        re.search("\.com\/(\d{4})\/", url).group(1)
+        re.search(r"\.com/(\d{4})/", url).group(1)
     )  # Check what year the url is
-    sex = re.search("sex%5D=(\w)", url).group(1)
+    sex = re.search(r"sex%5D=(\w)", url).group(1)
     if year >= 2019:
         data = get_results_new(url, sex, year)
     elif year >= 2010:
