@@ -19,15 +19,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     """Scrape london marathon"""
 
     # Set parsing values for different years (different page layouts)
-    if year >= 2019:
-        strainer_expr = 'class_ = "section-main"'
-        row_expr = 'class_ = "list-group-item"'
-        cell_expr = 'class_ = "list-field"'
-    else:
-        strainer_expr = '"tbody"'
-        row_expr = '"tr"'
-        cell_expr = '"td"'
-    
     if year ==  2021:
         row_indexes = [0, 1, 2, 3, 4, 5, 6, 9]
     elif year == 2014:
@@ -37,17 +28,33 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
 
     site = requests.get(url).text
     # Soup strainer restricts content to speed up soup
-    strainer = SoupStrainer(eval(strainer_expr))
+    # Annoyingly need to check year several times for different layouts (eval() broke)
+    if year >= 2019:
+        strainer = SoupStrainer(class_ = "section-main")
+    else:
+        strainer = SoupStrainer('tbody')
 
     soup = BeautifulSoup(site, "lxml", parse_only=strainer)
 
     # Loop through each row and column to create a list of cells
     my_table = []
-    for row in soup.find_all(eval(row_expr)):
+
+    if year >= 2019:
+        row_search = soup.find_all(class_ = "list-group-item")
+    else:
+        row_search = soup.find_all('tr')
+
+    for row in row_search:
         row_data = []
-        for cell in row.find_all(eval(cell_expr)):
+        
+        if year >= 2019:
+            cell_search = row.find_all(class_ = "list-field")
+        else:
+            cell_search = row.find_all('td')
+
+        for cell in cell_search:
             alt_text = cell.find("span")
-            if alt_text is not None:
+            if year < 2019 and alt_text is not None:
                 cell = alt_text["title"]
             else:
                 cell = cell.text
@@ -131,7 +138,7 @@ def get_results_old(url: str, sex: str, year: int) -> pd.DataFrame:
             row_data.append(cell)
 
         # If the row isn't empty, then create a dict of the row to create dataframe from
-        if len(row_data) > 0 and year != 2014:
+        if row_data and year != 2014:
             data_item = {
                 "Place (Overall)": row_data[0],
                 "Place (Gender)": row_data[1],
@@ -145,7 +152,7 @@ def get_results_old(url: str, sex: str, year: int) -> pd.DataFrame:
                 "Year": year,
             }
             my_table.append(data_item)
-        elif len(row_data) > 0 and year == 2014:
+        elif row_data and year == 2014:
             data_item = {
                 "Place (Overall)": row_data[0],
                 "Place (Gender)": row_data[1],
@@ -191,7 +198,7 @@ def generate_virgin_urls(sex, pages, year):
 
     urls = ["NaN"] * pages
     if year >= 2019:
-        for i in range(len):
+        for i in range(pages):
             urls[i] = (
                 f"https://results.virginmoneylondonmarathon.com/"
                 + str(year)
@@ -270,7 +277,7 @@ def main(years: Optional["list[int]"] = None):
     print("Generating URLS...")
     # Too lazy to setup dataframe for years/pages/gender, need to
     # Check if years to search has been set
-    if not years:
+    if years is None:
         years = [yr for yr in pages_men.keys() if yr != 2020] # 2020 has disappeared?
 
     for year in years:
@@ -372,5 +379,7 @@ def main(years: Optional["list[int]"] = None):
 
 
 if __name__ == "__main__":
-    years_to_search = [2015, 2016]
+    years_to_search = [2018, 2019]
     main(years_to_search)
+
+    # main()

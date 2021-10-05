@@ -14,3 +14,4 @@ results
 
 # %%
 sns.violinplot(data=results, x='Sex', y='Finish (Total Seconds)')
+plt.show()
