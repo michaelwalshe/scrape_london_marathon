@@ -1,40 +1,86 @@
 """
 File: london_scraper.py
 Project: scrape_london_marathon
-Created Date: 7-09-2021
 Author: Michael Walshe
------
-Last Modified: 7-09-2021
-Modified By: Michael Walshe
------
-Copyright (c) 2021 Amadeus Software Ltd
------
-HISTORY:
-Date      	By	Comments
-----------	---	---------------------------------------------------------
 """
-
 
 # Setting up required libraries
 import pandas as pd
 import numpy as np
 import requests
-import re  # regex
+import re 
 import concurrent.futures  # to allow multithreading
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
+from typing import Optional
+
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
 
+def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
+    """Scrape london marathon"""
 
-def get_results_new(url, sex, year):
-    # Function to scrape modern virgin london marathon results page (2020 and 2019)
+    # Set parsing values for different years (different page layouts)
+    if year >= 2019:
+        strainer_expr = 'class_ = "section-main"'
+        row_expr = 'class_ = "list-group-item"'
+        cell_expr = 'class_ = "list-field"'
+    else:
+        strainer_expr = '"tbody"'
+        row_expr = '"tr"'
+        cell_expr = '"td"'
+    
+    if year ==  2021:
+        row_indexes = [0, 1, 2, 3, 4, 5, 6, 9]
+    elif year == 2014:
+        row_indexes = [0, 1, 2, 3, 5, 6, 7, 9]
+    else:
+        row_indexes = [0, 1, 2, 3, 4, 5, 6, 8]
 
-    results = pd.DataFrame()
+    site = requests.get(url).text
+    # Soup strainer restricts content to speed up soup
+    strainer = SoupStrainer(eval(strainer_expr))
 
-    site = requests.get(url).text  # Use requests to get content from site
-    strainer = SoupStrainer(
-        class_="section-main"
-    )  # Soup strainer restricts content to sped up soup
-    soup = BeautifulSoup(site, "lxml", parse_only=strainer)  # Parse the html
+    soup = BeautifulSoup(site, "lxml", parse_only=strainer)
+
+    # Loop through each row and column to create a list of cells
+    my_table = []
+    for row in soup.find_all(eval(row_expr)):
+        row_data = []
+        for cell in row.find_all(eval(cell_expr)):
+            alt_text = cell.find("span")
+            if alt_text is not None:
+                cell = alt_text["title"]
+            else:
+                cell = cell.text
+            row_data.append(cell)
+
+        # If the row isn't empty, then create a dict of the row to create dataframe from
+        if row_data:
+            data_item = {
+                "Place (Overall)": row_data[row_indexes[0]],
+                "Place (Gender)": row_data[row_indexes[1]],
+                "Place (Category)": row_data[row_indexes[2]],
+                "Name": row_data[row_indexes[3]],
+                "Sex": sex,
+                "Club": row_data[row_indexes[4]],
+                "Running Number": row_data[row_indexes[5]],
+                "Category": row_data[row_indexes[6]],
+                "Finish": row_data[row_indexes[7]],
+                "Year": year,
+            }
+            my_table.append(data_item)
+
+    results = pd.DataFrame(my_table).iloc[1:]  # Strip table header
+
+    return results
+
+
+def get_results_new(url: str, sex: str, year :int) -> pd.DataFrame:
+    """Function to scrape modern virgin london marathon results page (2019 to 2021)"""
+
+    site = requests.get(url).text
+    # Soup strainer restricts content to speed up soup
+    strainer = SoupStrainer(class_="section-main")
+    soup = BeautifulSoup(site, "lxml", parse_only=strainer)
     # fields = soup.find(class_='section-main')
 
     # Loop through each row and column to create a list of cells
@@ -45,22 +91,7 @@ def get_results_new(url, sex, year):
             row_data.append(cell.text)
 
         # If the row isn't empty, then create a dict of the row to create dataframe from
-        # If 2020, then use different row index for Finish
-        if len(row_data) > 0 and year != 2020:
-            data_item = {
-                "Place (Overall)": row_data[0],
-                "Place (Gender)": row_data[1],
-                "Place (Category)": row_data[2],
-                "Name": row_data[3],
-                "Sex": sex,
-                "Club": row_data[4],
-                "Running Number": row_data[5],
-                "Category": row_data[6],
-                "Finish": row_data[7],
-                "Year": year,
-            }
-            my_table.append(data_item)
-        elif len(row_data) > 0 and year == 2020:
+        if row_data:
             data_item = {
                 "Place (Overall)": row_data[0],
                 "Place (Gender)": row_data[1],
@@ -75,16 +106,13 @@ def get_results_new(url, sex, year):
             }
             my_table.append(data_item)
 
-    df = pd.DataFrame(my_table).iloc[1:]  # Strip table header
-    results = results.append(df)  # Append to results
+    results = pd.DataFrame(my_table).iloc[1:]  # Strip table header
 
     return results
 
 
-def get_results_old(url, sex, year):
-    # Function to scrape old virgin london marathon results page (2014 to 2018)
-
-    results = pd.DataFrame()  # Set up empty dataframe for results
+def get_results_old(url: str, sex: str, year: int) -> pd.DataFrame:
+    """Function to scrape old virgin london marathon results page (2014 to 2018)"""
 
     site = requests.get(url).text  # Use requests to get content from site
     strainer = SoupStrainer("tbody")  # Soup strainer restricts content to sped up soup
@@ -132,33 +160,38 @@ def get_results_old(url, sex, year):
             }
             my_table.append(data_item)
 
-    df = pd.DataFrame(my_table)  # Strip table header
-    results = results.append(df)  # Append to results
+    results = pd.DataFrame(my_table)  # Strip table header
 
     return results
 
 
 def get_results(url):
-    # Function choose what results func to apply
-    # Used to allow single function for pool.map
-    year = int(
-        re.search(r"\.com/(\d{4})/", url).group(1)
-    )  # Check what year the url is
+    """Function chooses what results func to apply. Used to allow single function for pool.map"""
+
+    # Get year and sex from the URL
+    year = int(re.search(r"\.com/(\d{4})/", url).group(1))
     sex = re.search(r"sex%5D=(\w)", url).group(1)
-    if year >= 2019:
-        data = get_results_new(url, sex, year)
-    elif year >= 2010:
-        data = get_results_old(url, sex, year)
-    else:
-        data = None
+    page = re.search(r"page=(.*?)&event=", url).group(1)
+    print(f"Getting results for {sex} in {year}, page {page}")
+    # if year >= 2019:
+    #     data = get_results_new(url, sex, year)
+    # elif year >= 2010:
+    #     data = get_results_old(url, sex, year)
+    # else:
+    #     data = None
+
+    data = get_results_table(url, sex, year)
+
+    print(f"Finished getting results for {sex} in {year}, page {page}")
     return data
 
 
-def get_virgin_urls(sex, pages, year):
-    # Get a list of urls, this is needed to be used to apply function to to then use multiprocessing
+def generate_virgin_urls(sex, pages, year):
+    """Get a list of urls, this is needed to be used to apply function to to then use multiprocessing"""
+
     urls = ["NaN"] * pages
     if year >= 2019:
-        for i in range(len(urls)):
+        for i in range(len):
             urls[i] = (
                 f"https://results.virginmoneylondonmarathon.com/"
                 + str(year)
@@ -170,7 +203,7 @@ def get_virgin_urls(sex, pages, year):
             )
 
     elif year >= 2014:
-        for i in range(len(urls)):
+        for i in range(pages):
             urls[i] = (
                 "https://results.virginmoneylondonmarathon.com/"
                 + str(year)
@@ -181,7 +214,7 @@ def get_virgin_urls(sex, pages, year):
             )
 
     elif year >= 2010:
-        for i in range(len(urls)):
+        for i in range(pages):
             urls[i] = (
                 "https://results.virginmoneylondonmarathon.com/"
                 + str(year)
@@ -194,8 +227,8 @@ def get_virgin_urls(sex, pages, year):
     return urls
 
 
-if __name__ == "__main__":
-
+def main(years: Optional["list[int]"] = None):
+    """Main function that scrapes london marathon website. If specific years are required, input list of years"""
     urls = []
     # Get no. of pages using technique like
     # Not kept in/included in functions because requests take forever!
@@ -207,22 +240,58 @@ if __name__ == "__main__":
     # m_pages = int(soup_m.find(class_='pages').text[-4:-2])
     # w_pages = int(soup_w.find(class_='pages').text[-4:-2])
     # print(m_pages, w_pages)
-    pages_men = [23, 24, 23, 23, 24, 24, 24, 24, 29, 22]
-    pages_women = [13, 14, 13, 14, 15, 16, 16, 17, 21, 22]
-    for i, year in enumerate(range(2011, 2021)):
-        w_urls = get_virgin_urls("W", pages_women[i], year)
-        m_urls = get_virgin_urls("M", pages_men[i], year)
-        urls = urls + m_urls + w_urls\
+    pages_men = {
+        2011: 23,
+        2012: 24,
+        2013: 23,
+        2014: 23,
+        2015: 24,
+        2016: 24,
+        2017: 24,
+        2018: 24,
+        2019: 29,
+        2020: 22,
+        2021: 25,
+    }
+    pages_women = {
+        2011: 13,
+        2012: 14,
+        2013: 13,
+        2014: 14,
+        2015: 15,
+        2016: 16,
+        2017: 16,
+        2018: 17,
+        2019: 21,
+        2020: 22,
+        2021: 17,
+    }
+
+    print("Generating URLS...")
+    # Too lazy to setup dataframe for years/pages/gender, need to
+    # Check if years to search has been set
+    if not years:
+        years = [yr for yr in pages_men.keys() if yr != 2020] # 2020 has disappeared?
+
+    for year in years:
+        w_urls = generate_virgin_urls("W", pages_women[year], year)
+        m_urls = generate_virgin_urls("M", pages_men[year], year)
+        urls = urls + m_urls + w_urls
+
+
 
     # Warning: Takes ~10mins to complete!
     # Trying using multithreading instead of multiprocessing
     MAX_THREADS = 30
     threads = min(MAX_THREADS, len(urls))
-
+    print("Beginning data extract....")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         data = list(executor.map(get_results, urls))
 
-    # Get dataframe from list of df (sep cell to allow for recreation without re-parsing)
+
+
+    print("Cleaning and saving data...")
+    # Get dataframe from list of df
     results = pd.concat(data)
 
     # Some data cleaning
@@ -247,8 +316,8 @@ if __name__ == "__main__":
     # Split first/lastname into new columns
     results["Name"] = results["Name"].str.replace(r"(»)", "", regex=True)
     results["Name"] = results["Name"].str.replace(r"(\n)", "", regex=True)
-    LastFirst = results["Name"].str.split(pat=",", n=1, expand=True)
-    results["FirstName"], results["LastName"] = LastFirst[1], LastFirst[0]
+    last_first = results["Name"].str.split(pat=",", n=1, expand=True)
+    results["FirstName"], results["LastName"] = last_first[1], last_first[0]
     # Remove comma from Name column, so that this can be saved as a CSV ----- Must happen after splitting Name into two cols!!
     results["Name"] = results["Name"].str.replace(r"(\,)", "", regex=True)
 
@@ -265,7 +334,8 @@ if __name__ == "__main__":
 
     # Delete odd race number row - gives fastest male/female so is duplicate
     results = results.loc[
-        (results["Running Number"] != "RM9999") & (results["Running Number"] != "RF9999")
+        (results["Running Number"] != "RM9999")
+        & (results["Running Number"] != "RF9999")
     ]
 
     results = results.astype(
@@ -284,17 +354,23 @@ if __name__ == "__main__":
 
     # Due to an irritating bug with converting objects to Int64, needed to first convert to float and then to int
     results = results.astype(
-        {"Place (Overall)": "Int64", "Place (Gender)": "Int64", "Place (Category)": "Int64"}
+        {
+            "Place (Overall)": "Int64",
+            "Place (Gender)": "Int64",
+            "Place (Category)": "Int64",
+        }
     )
     results["Finish"] = pd.to_timedelta(results["Finish"])
     results["Finish (Total Seconds)"] = results["Finish"].dt.total_seconds()
 
-
     # And save them in a csv
     results.to_csv(
-        r"C:\Users\michael.walshe\Documents\Python Projects\scrape_london_marathon\London_Marathon_Big.csv",
+        r"London_Marathon_Big.csv",
         index=False,
         header=True,
     )
 
 
+if __name__ == "__main__":
+    years_to_search = [2015, 2016]
+    main(years_to_search)
