@@ -12,14 +12,14 @@ import re
 import concurrent.futures  # to allow multithreading
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
 from typing import Optional
-
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
+
 
 def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     """Scrape london marathon"""
 
     # Set parsing values for different years (different page layouts)
-    if year ==  2021:
+    if year == 2021:
         row_indexes = [0, 1, 2, 3, 4, 5, 6, 9]
     elif year == 2014:
         row_indexes = [0, 1, 2, 3, 5, 6, 7, 9]
@@ -30,7 +30,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     # Soup strainer restricts content to speed up soup
     # Annoyingly need to check year several times for different layouts (eval() broke)
     if year >= 2019:
-        strainer = SoupStrainer(class_ = "section-main")
+        strainer = SoupStrainer(class_="section-main")
     else:
         strainer = SoupStrainer('tbody')
 
@@ -40,7 +40,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     my_table = []
 
     if year >= 2019:
-        row_search = soup.find_all(class_ = "list-group-item")
+        row_search = soup.find_all(class_="list-group-item")
     else:
         row_search = soup.find_all('tr')
 
@@ -48,7 +48,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         row_data = []
         
         if year >= 2019:
-            cell_search = row.find_all(class_ = "list-field")
+            cell_search = row.find_all(class_="list-field")
         else:
             cell_search = row.find_all('td')
 
@@ -81,7 +81,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     return results
 
 
-def get_results_new(url: str, sex: str, year :int) -> pd.DataFrame:
+def get_results_new(url: str, sex: str, year: int) -> pd.DataFrame:
     """Function to scrape modern virgin london marathon results page (2019 to 2021)"""
 
     site = requests.get(url).text
@@ -278,7 +278,7 @@ def main(years: Optional["list[int]"] = None):
     # Too lazy to setup dataframe for years/pages/gender, need to
     # Check if years to search has been set
     if years is None:
-        years = [yr for yr in pages_men.keys() if yr != 2020] # 2020 has disappeared?
+        years = [yr for yr in pages_men.keys() if yr != 2020]  # 2020 has disappeared?
 
     for year in years:
         w_urls = generate_virgin_urls("W", pages_women[year], year)
