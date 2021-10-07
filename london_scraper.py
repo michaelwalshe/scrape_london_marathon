@@ -288,8 +288,6 @@ def main(years: Optional["list[int]"] = None):
         m_urls = generate_virgin_urls("M", pages_men[year], year)
         urls = urls + m_urls + w_urls
 
-
-
     # Warning: Takes ~10mins to complete!
     # Trying using multithreading instead of multiprocessing
     MAX_THREADS = 30
@@ -297,8 +295,6 @@ def main(years: Optional["list[int]"] = None):
     print("Beginning data extract....")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         data = list(executor.map(get_results, urls))
-
-
 
     print("Cleaning and saving data...")
     # Get dataframe from list of df
@@ -328,13 +324,15 @@ def main(years: Optional["list[int]"] = None):
     results["Name"] = results["Name"].str.replace(r"(\n)", "", regex=True)
     last_first = results["Name"].str.split(pat=",", n=1, expand=True)
     results["FirstName"], results["LastName"] = last_first[1], last_first[0]
-    # Remove comma from Name column, so that this can be saved as a CSV ----- Must happen after splitting Name into two cols!!
+    # Remove comma from Name column, so that this can be saved as a CSV
+    # Must happen after splitting Name into two cols!!
     results["Name"] = results["Name"].str.replace(r"(\,)", "", regex=True)
 
     # Change W to F for 2020
     results["Sex"] = results["Sex"].str.replace("W", "F")
 
-    # Create DSQ column for did not finish results, to avoid removing info when using nan
+    # Create DSQ column for did not finish results,
+    # to avoid removing info when using nan
     results["DSQ"] = results["Finish"] == "DSQ"
 
     # Replace non-standard '–' with NaN for missing vals
@@ -362,7 +360,8 @@ def main(years: Optional["list[int]"] = None):
         }
     )
 
-    # Due to an irritating bug with converting objects to Int64, needed to first convert to float and then to int
+    # Due to an irritating bug with converting objects to Int64, needed to
+    # first convert to float and then to int
     results = results.astype(
         {
             "Place (Overall)": "Int64",
