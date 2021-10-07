@@ -8,7 +8,7 @@ Author: Michael Walshe
 import pandas as pd
 import numpy as np
 import requests
-import re 
+import re
 import concurrent.futures  # to allow multithreading
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
 from typing import Optional
@@ -46,7 +46,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
 
     for row in row_search:
         row_data = []
-        
+
         if year >= 2019:
             cell_search = row.find_all(class_="list-field")
         else:
@@ -173,7 +173,8 @@ def get_results_old(url: str, sex: str, year: int) -> pd.DataFrame:
 
 
 def get_results(url):
-    """Function chooses what results func to apply. Used to allow single function for pool.map"""
+    """Function chooses what results func to apply.
+    Used to allow single function for pool.map"""
 
     # Get year and sex from the URL
     year = int(re.search(r"\.com/(\d{4})/", url).group(1))
@@ -194,13 +195,14 @@ def get_results(url):
 
 
 def generate_virgin_urls(sex, pages, year):
-    """Get a list of urls, this is needed to be used to apply function to to then use multiprocessing"""
+    """Get a list of urls, this is needed to be used
+    to apply function to to then use multiprocessing"""
 
     urls = ["NaN"] * pages
     if year >= 2019:
         for i in range(pages):
             urls[i] = (
-                f"https://results.virginmoneylondonmarathon.com/"
+                "https://results.virginmoneylondonmarathon.com/"
                 + str(year)
                 + "/?page="
                 + str(i + 1)
@@ -235,7 +237,8 @@ def generate_virgin_urls(sex, pages, year):
 
 
 def main(years: Optional["list[int]"] = None):
-    """Main function that scrapes london marathon website. If specific years are required, input list of years"""
+    """Main function that scrapes london marathon website.
+    If specific years are required, input list of years"""
     urls = []
     # Get no. of pages using technique like
     # Not kept in/included in functions because requests take forever!
