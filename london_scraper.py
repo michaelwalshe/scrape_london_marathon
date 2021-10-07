@@ -206,7 +206,8 @@ def generate_virgin_urls(sex, pages, year):
                 + str(year)
                 + "/?page="
                 + str(i + 1)
-                + "&event=ALL&num_results=1000&pid=search&pidp=results_nav&search%5Bsex%5D="
+                + "&event=ALL&num_results=1000&pid=search&pidp="
+                + "results_nav&search%5Bsex%5D="
                 + sex
                 + "&search%5Bage_class%5D=%25&search%5Bnation%5D=%25&search_sort=name"
             )
@@ -218,7 +219,8 @@ def generate_virgin_urls(sex, pages, year):
                 + str(year)
                 + "/?page="
                 + str(i + 1)
-                + "&event=MAS&num_results=1000&pid=list&search%5Bage_class%5D=%25&search%5Bsex%5D="
+                + "&event=MAS&num_results=1000&pid=list&search%5"
+                + "Bage_class%5D=%25&search%5Bsex%5D="
                 + sex
             )
 
