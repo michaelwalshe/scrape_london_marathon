@@ -1,0 +1,36 @@
+name: scrape_london_marathon
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+
+  # Core usual modules
+  - pytest
+  - pytest-cov
+
+  # Core scientific modules
+  - numpy
+  - pandas
+  - scipy
+
+  # Jupyter
+  - jupyter
+  - ipykernel
+  - jupyterlab
+
+  # Plotting
+  - matplotlib
+  - seaborn
+
+  # Data science
+  - statsmodels
+  - scikit-learn
+
+  # Web scraping
+  - bs4
+  - requests
+
+  # Data engineering
+  - sqlalchemy

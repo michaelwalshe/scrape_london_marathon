@@ -383,7 +383,7 @@ def main(years: Optional["list[int]"] = None):
 
 
 if __name__ == "__main__":
-    years_to_search = [2018, 2019]
-    main(years_to_search)
+    # years_to_search = [2018, 2019]
+    # main(years_to_search)
 
-    # main()
+    main()
