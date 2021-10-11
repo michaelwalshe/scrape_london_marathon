@@ -2,6 +2,7 @@
 # To add a new markdown cell, type '# %% [markdown]'
 
 # %%
+import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -19,7 +20,7 @@ from sklearn import metrics
 results = pd.read_csv(
     './London_Marathon_Big_Backup.csv',
     dtype={
-        'Place (Overall)': "float64",  # Declare ints as floats for statsmodels (can't interpret)
+        'Place (Overall)': "float64",  # Declare ints as floats for statsmodels
         'Place (Gender)': "float64",
         'Name': str,
         'Sex': str,
