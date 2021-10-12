@@ -376,7 +376,7 @@ def main(years: Optional["list[int]"] = None):
 
     # And save them in a csv
     results.to_csv(
-        r"London_Marathon_Big.csv",
+        r"../data/London_Marathon_Big.csv",
         index=False,
         header=True,
     )

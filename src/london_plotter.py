@@ -9,6 +9,7 @@ import seaborn as sns
 import statsmodels.formula.api as smf
 # import statsmodels.api as sm
 
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
@@ -18,7 +19,7 @@ from sklearn import metrics
 # Read in dataset, with dtypes set ready for analyis
 
 results = pd.read_csv(
-    './London_Marathon_Big_Backup.csv',
+    '../data/London_Marathon_Big_Backup.csv',
     dtype={
         'Place (Overall)': "float64",  # Declare ints as floats for statsmodels
         'Place (Gender)': "float64",
@@ -68,10 +69,19 @@ print(res.summary())
 
 # Try sklearn linear regression
 
+# Get label and value arrays of interest, get rid of NaNs
 X = results[['Sex', 'Category']]
+X = X.fillna(X.mode())
 y = results['Finish (Total Seconds)']
+y = y.fillna(y.mean())
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# Change categorical variables using onehot to 1/0+
+enc = preprocessing.OneHotEncoder()
+X_transform = enc.fit_transform(X)
+
+# Sample data
+X_train, X_test, y_train, y_test = train_test_split(X_transform, y, test_size=0.2)
+
 
 regressor = LinearRegression()
 regressor.fit(X_train, y_train)
