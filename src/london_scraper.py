@@ -12,6 +12,7 @@ import re
 import concurrent.futures  # to allow multithreading
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
 from typing import Optional
+
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
 
 
@@ -32,7 +33,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     if year >= 2019:
         strainer = SoupStrainer(class_="section-main")
     else:
-        strainer = SoupStrainer('tbody')
+        strainer = SoupStrainer("tbody")
 
     soup = BeautifulSoup(site, "lxml", parse_only=strainer)
 
@@ -42,7 +43,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     if year >= 2019:
         row_search = soup.find_all(class_="list-group-item")
     else:
-        row_search = soup.find_all('tr')
+        row_search = soup.find_all("tr")
 
     for row in row_search:
         row_data = []
@@ -50,7 +51,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         if year >= 2019:
             cell_search = row.find_all(class_="list-field")
         else:
-            cell_search = row.find_all('td')
+            cell_search = row.find_all("td")
 
         for cell in cell_search:
             alt_text = cell.find("span")
