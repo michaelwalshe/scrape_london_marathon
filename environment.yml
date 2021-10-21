@@ -8,8 +8,12 @@ dependencies:
 
   # Core usual modules
   - flake8
+  - black
+
+  # Testing
   - pytest
   - pytest-cov
+  - pytest-regressions
 
   # Core scientific modules
   - numpy
