@@ -4,14 +4,19 @@ Project: scrape_london_marathon
 Author: Michael Walshe
 """
 
+import concurrent.futures  # to allow multithreading
 import requests
 import re
-import concurrent.futures  # to allow multithreading
+import sys
 from typing import Optional, Union
+
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
 
 import pandas as pd
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
+
+sys.path.append(".")
+from src import params
 
 
 def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
@@ -97,22 +102,24 @@ def get_results(url):
 
 
 def generate_virgin_urls(
-        pages,
-        years: Optional['list[int]'] = None,
-        sexes: Union[list, tuple] = ("M", "W"),) -> list:
+    pages, years: Optional["list[int]"] = None, sexes: Union[list, tuple, None] = None
+) -> list:
     """Get a list of urls, this is needed to be used
     to apply function to to then use multiprocessing"""
+
+    if sexes is None:
+        sexes = list(pages.keys())
 
     if years is None:
         years = [yr for yr in pages[sexes[0]].keys() if yr != 2020]
 
     urls = []
     for sex in sexes:
-        urls_one_gender = []
+        urls_single_sex = []
         for year in years:
             pages_of_results = pages[sex][year]
-            if year >= 2019:
-                for i in range(pages_of_results):
+            for i in range(pages_of_results):
+                if year >= 2019:
                     url = (
                         "https://results.virginmoneylondonmarathon.com/"
                         + str(year)
@@ -125,8 +132,7 @@ def generate_virgin_urls(
                         + "%5Bnation%5D=%25&search_sort=name"
                     )
 
-            elif year >= 2014:
-                for i in range(pages_of_results):
+                elif year >= 2014:
                     url = (
                         "https://results.virginmoneylondonmarathon.com/"
                         + str(year)
@@ -137,8 +143,7 @@ def generate_virgin_urls(
                         + sex
                     )
 
-            elif year >= 2010:
-                for i in range(pages_of_results):
+                elif year >= 2010:
                     url = (
                         "https://results.virginmoneylondonmarathon.com/"
                         + str(year)
@@ -147,12 +152,12 @@ def generate_virgin_urls(
                         + "&event=MAS&num_results=1000&pid=search&search%5Bsex%5D="
                         + sex
                     )
-            urls_one_gender.append(url)
-        urls.extend(urls_one_gender)
+                urls_single_sex.append(url)
+        urls.extend(urls_single_sex)
     return urls
 
 
-def run_concurrent_scraping(urls: 'list[str]', MAX_THREADS=30) -> 'list[pd.DataFrame]':
+def run_concurrent_scraping(urls: "list[str]", MAX_THREADS=30) -> "list[pd.DataFrame]":
     threads = min(MAX_THREADS, len(urls))
     print("Beginning data extract....")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
@@ -164,46 +169,9 @@ def run_concurrent_scraping(urls: 'list[str]', MAX_THREADS=30) -> 'list[pd.DataF
 def main():
     """Main function that scrapes london marathon website."""
 
-    pages_men = {
-        2011: 23,
-        2012: 24,
-        2013: 23,
-        2014: 23,
-        2015: 24,
-        2016: 24,
-        2017: 24,
-        2018: 24,
-        2019: 29,
-        2020: 22,
-        2021: 25,
-    }
-
-    pages_women = {
-        2011: 13,
-        2012: 14,
-        2013: 13,
-        2014: 14,
-        2015: 15,
-        2016: 16,
-        2017: 16,
-        2018: 17,
-        2019: 21,
-        2020: 22,
-        2021: 17,
-    }
-
     # Pages is map of sexes to number of pages of results in the search for that year
-    # This was gathered semi manually, using code below:
-    pages = {"M": pages_men, "W": pages_women}
-
-    # site_m=requests.get(url1+'1'+url2+'M').text
-    # site_w=requests.get(url1+'1'+url2+'W').text
-    # soup_m = BeautifulSoup(site_m,'lxml')
-    # soup_w = BeautifulSoup(site_w,'lxml')
-
-    # m_pages = int(soup_m.find(class_='pages').text[-4:-2])
-    # w_pages = int(soup_w.find(class_='pages').text[-4:-2])
-    # print(m_pages, w_pages)
+    # This was gathered semi manually, using code in params.py
+    pages = params.pages
 
     print("Generating URLS...")
     urls = generate_virgin_urls(pages)
@@ -212,7 +180,7 @@ def main():
     # Trying using multithreading instead of multiprocessing
     data = run_concurrent_scraping(urls)
 
-    print('Saving data')
+    print("Saving data")
     results = pd.concat(data)
 
     return results
@@ -222,4 +190,7 @@ if __name__ == "__main__":
     # years_to_search = [2018, 2019]
     # main(years_to_search)
 
-    main()
+    # main()
+    pages = {"M": {2020: 1, 2021: 2}}
+
+    print(generate_virgin_urls(pages))

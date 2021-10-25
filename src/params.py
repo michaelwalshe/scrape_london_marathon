@@ -1,4 +1,3 @@
-
 pages_men = {
     2011: 23,
     2012: 24,
@@ -27,7 +26,7 @@ pages_women = {
 }
 
 # Pages is map of sexes to number of pages of results in the search for that year
-# This was gathered semi manually, using code below:
+# This was gathered semi manually, using code like below:
 # site_m=requests.get(url1+'1'+url2+'M').text
 # site_w=requests.get(url1+'1'+url2+'W').text
 # soup_m = BeautifulSoup(site_m,'lxml')
@@ -35,8 +34,9 @@ pages_women = {
 
 # m_pages = int(soup_m.find(class_='pages').text[-4:-2])
 # w_pages = int(soup_w.find(class_='pages').text[-4:-2])
-# print(m_pages, w_pages)
+
 pages = {"M": pages_men, "W": pages_women}
 
-# Cutting out 2020 as it has disappeared?
-years = [yr for yr in pages_men.keys() if yr != 2020]
+# pages = {"M": {2021: 1}}
+
+years = [yr for yr in pages_men.keys()]

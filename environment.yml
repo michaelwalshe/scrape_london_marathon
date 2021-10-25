@@ -14,6 +14,7 @@ dependencies:
   - pytest
   - pytest-cov
   - pytest-regressions
+  - pytest-html
 
   # Core scientific modules
   - numpy
@@ -36,6 +37,7 @@ dependencies:
   # Web scraping
   - bs4
   - requests
+  - lxml
 
   # Data engineering
   - sqlalchemy

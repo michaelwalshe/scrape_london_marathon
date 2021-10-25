@@ -12,9 +12,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 
 
-def main():
+def main(filename):
     results = pd.read_csv(
-        "../data/London_Marathon_Big_Backup.csv",
+        f"./data/{filename}.csv",
         dtype={
             "Place (Overall)": "Int64",
             "Place (Gender)": "Int64",
@@ -42,8 +42,7 @@ def main():
 
     # Try explanatory linear regression with statsmodels
     mod = smf.gls(
-        formula='Q("Finish (Total Seconds)") ~ Sex' "+ Category",
-        data=results
+        formula='Q("Finish (Total Seconds)") ~ Sex' "+ Category", data=results
     )
 
     res = mod.fit()
@@ -71,15 +70,14 @@ def main():
     y_pred = regressor.predict(X_test)
 
     df = pd.DataFrame({"Actual": y_test, "Predicted": y_pred})
-    df
-
-    # %%
-
+    print(df.head())
     # Evaluate algorithm
 
     print("Mean Absolute Error:", metrics.mean_absolute_error(y_test, y_pred))
     print("Mean Squared Error:", metrics.mean_squared_error(y_test, y_pred))
-    print("Root Mean Squared Error:", np.sqrt(metrics.mean_squared_error(y_test, y_pred)))
+    print(
+        "Root Mean Squared Error:", np.sqrt(metrics.mean_squared_error(y_test, y_pred))
+    )
 
 
 if __name__ == "__main__":
