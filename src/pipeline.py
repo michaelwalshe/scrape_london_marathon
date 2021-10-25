@@ -25,10 +25,10 @@ def main():
     # Data is a list of dataframes, one for each year
     data = london_scraper.run_concurrent_scraping(urls)
 
-    print("Concatenating data")
+    print("Concatenating data...")
     results = pd.concat(data)
 
-    print("Cleaning data")
+    print("Cleaning data...")
     results = london_cleaner.london_cleaner(results)
 
     # And save them in a temp csv to then test
@@ -38,7 +38,7 @@ def main():
         header=True,
     )
 
-    print('"Testing scraper outputs')
+    print("Testing scraper outputs...")
     return_code = pytest.main(
         [
             "./tests/test_london_scraper_output.py",

@@ -97,11 +97,11 @@ def get_results(url):
     year = int(re.search(r"\.com/(\d{4})/", url).group(1))
     sex = re.search(r"sex%5D=(\w)", url).group(1)
     page = re.search(r"page=(.*?)&event=", url).group(1)
-    print(f"Getting results for {sex} in {year}, page {page}")
+    print(f"Getting results for {sex} in {year}, page {page}\n")
 
     data = get_results_table(url, sex, year)
 
-    print(f"Finished getting results for {sex} in {year}, page {page}")
+    print(f"Finished getting results for {sex} in {year}, page {page}\n")
     return data
 
 
@@ -163,7 +163,7 @@ def generate_virgin_urls(
 
 def run_concurrent_scraping(urls: "list[str]", MAX_THREADS=30) -> "list[pd.DataFrame]":
     threads = min(MAX_THREADS, len(urls))
-    print("Beginning data extract....")
+    print("Beginning data extract...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         data = list(executor.map(get_results, urls))
 

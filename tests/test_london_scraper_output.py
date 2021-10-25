@@ -2,6 +2,7 @@ import sys
 
 import pytest
 import pandas as pd
+import numpy as np
 from numpy import dtype
 from pandas import Int64Dtype, CategoricalDtype
 
@@ -23,7 +24,25 @@ def scraper_output():
             "Sex": str,
             "Club": str,
             "Running Number": object,
-            "Category": "category",
+            "Category": CategoricalDtype(
+                categories=[
+                    '18-39',
+                    '40-44',
+                    '45-49',
+                    '50-54',
+                    '55-59',
+                    '60-64',
+                    '65-69',
+                    '70+',
+                    '70-74',
+                    '75-79',
+                    '80-84',
+                    '85+',
+                    '80+',
+                    'Unknown'
+                ],
+                ordered=False,
+            ),
             "Year": "Int64",
             "Country": str,
             "FirstName": str,
@@ -70,15 +89,20 @@ def test_output_attributes(scraper_output):
             "Running Number": dtype("O"),
             "Category": CategoricalDtype(
                 categories=[
-                    "18-39",
-                    "40-44",
-                    "45-49",
-                    "50-54",
-                    "55-59",
-                    "60-64",
-                    "65-69",
-                    "70-74",
-                    "75-79",
+                    '18-39',
+                    '40-44',
+                    '45-49',
+                    '50-54',
+                    '55-59',
+                    '60-64',
+                    '65-69',
+                    '70+',
+                    '70-74',
+                    '75-79',
+                    '80-84',
+                    '85+',
+                    '80+',
+                    'Unknown'
                 ],
                 ordered=False,
             ),
@@ -96,28 +120,35 @@ def test_output_attributes(scraper_output):
 
     assert exp_cols == list(results.columns), "Expected columns not found"
     assert exp_rows_min <= results.shape[0], "Less than minimum expected number of rows"
-    pd.testing.assert_series_equal(exp_dtypes, results.dtypes)
+
+    assert exp_dtypes.values.tolist() == results.dtypes.values.tolist()
 
 
 def test_category_values(scraper_output):
     results = scraper_output
 
     exp_categories = [
-        "18-39",
-        "40-44",
-        "45-49",
-        "50-54",
-        "55-59",
-        "60-64",
-        "65-69",
-        "70-74",
-        "75-79",
+        '18-39',
+        '40-44',
+        '45-49',
+        '50-54',
+        '55-59',
+        '60-64',
+        '65-69',
+        '70+',
+        '70-74',
+        '75-79',
+        '80-84',
+        '85+',
+        '80+',
+        'Unknown',
+        np.nan
     ]
     actual_categories = results["Category"].unique().tolist()
 
     assert all(
         cat in exp_categories for cat in actual_categories
-    ), "Unexpected Category value"
+    ), f"Unexpected Category value in {actual_categories}"
 
 
 def test_sex_values(scraper_output):

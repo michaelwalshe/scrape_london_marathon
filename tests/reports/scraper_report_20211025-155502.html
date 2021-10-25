@@ -428,8 +428,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
     notFoundMessage.hidden = !allRowsHidden;
 }
 </script>
-    <h1>complete_report.html</h1>
-    <p>Report generated on 25-Oct-2021 at 15:48:14 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <h1>scraper_report_20211025-155502.html</h1>
+    <p>Report generated on 25-Oct-2021 at 16:04:00 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -445,8 +445,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.8.12</td></tr></table>
     <h2>Summary</h2>
-    <p>0 tests ran in 0.79 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>5 tests ran in 15.64 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">3 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">2 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -456,4 +456,49 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable" col="duration">Duration</th>
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
-          <th colspan="4">No results found. Try to check the filters</th></tr></thead></table></body></html>
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">tests/test_london_scraper_output.py::test_output_attributes</td>
+          <td class="col-duration">3.53</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">scraper_output =         Place (Overall)  ...  Finish (Total Seconds)<br/>0                     1  ...                  7480.0<br/>1           ...    23146  ...                 17269.0<br/>388547             &lt;NA&gt;  ...                     NaN<br/><br/>[388548 rows x 15 columns]<br/><br/>    def test_output_attributes(scraper_output):<br/>        results = scraper_output<br/>        exp_cols = [<br/>            &quot;Place (Overall)&quot;,<br/>            &quot;Place (Gender)&quot;,<br/>            &quot;Place (Category)&quot;,<br/>            &quot;Name&quot;,<br/>            &quot;Sex&quot;,<br/>            &quot;Club&quot;,<br/>            &quot;Running Number&quot;,<br/>            &quot;Category&quot;,<br/>            &quot;Finish&quot;,<br/>            &quot;Year&quot;,<br/>            &quot;Country&quot;,<br/>            &quot;FirstName&quot;,<br/>            &quot;LastName&quot;,<br/>            &quot;DSQ&quot;,<br/>            &quot;Finish (Total Seconds)&quot;,<br/>        ]<br/>    <br/>        exp_dtypes = pd.Series(<br/>            {<br/>                &quot;Place (Overall)&quot;: Int64Dtype(),<br/>                &quot;Place (Gender)&quot;: Int64Dtype(),<br/>                &quot;Place (Category)&quot;: dtype(&quot;float64&quot;),<br/>                &quot;Name&quot;: dtype(&quot;O&quot;),<br/>                &quot;Sex&quot;: dtype(&quot;O&quot;),<br/>                &quot;Club&quot;: dtype(&quot;O&quot;),<br/>                &quot;Running Number&quot;: dtype(&quot;O&quot;),<br/>                &quot;Category&quot;: CategoricalDtype(<br/>                    categories=[<br/>                        &quot;18-39&quot;,<br/>                        &quot;40-44&quot;,<br/>                        &quot;45-49&quot;,<br/>                        &quot;50-54&quot;,<br/>                        &quot;55-59&quot;,<br/>                        &quot;60-64&quot;,<br/>                        &quot;65-69&quot;,<br/>                        &quot;70-74&quot;,<br/>                        &quot;75-79&quot;,<br/>                    ],<br/>                    ordered=False,<br/>                ),<br/>                &quot;Finish&quot;: dtype(&quot;&lt;m8[ns]&quot;),<br/>                &quot;Year&quot;: Int64Dtype(),<br/>                &quot;Country&quot;: dtype(&quot;O&quot;),<br/>                &quot;FirstName&quot;: dtype(&quot;O&quot;),<br/>                &quot;LastName&quot;: dtype(&quot;O&quot;),<br/>                &quot;DSQ&quot;: dtype(&quot;bool&quot;),<br/>                &quot;Finish (Total Seconds)&quot;: dtype(&quot;float64&quot;),<br/>            }<br/>        )<br/>    <br/>        exp_rows_min = 1000  # One sex for one year should give at least this many<br/>    <br/>        assert exp_cols == list(results.columns), &quot;Expected columns not found&quot;<br/>        assert exp_rows_min &lt;= results.shape[0], &quot;Less than minimum expected number of rows&quot;<br/>&gt;       pd.testing.assert_series_equal(exp_dtypes, results.dtypes)<br/><br/>tests\test_london_scraper_output.py:99: <br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/>pandas\_libs\testing.pyx:53: in pandas._libs.testing.assert_almost_equal<br/>    ???<br/>_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _<br/><br/>&gt;   ???<br/><span class="error">E   AssertionError: Series are different</span><br/><span class="error">E   </span><br/><span class="error">E   Series values are different (6.66667 %)</span><br/><span class="error">E   [index]: [Place (Overall), Place (Gender), Place (Category), Name, Sex, Club, Running Number, Category, Finish, Year, Country, FirstName, LastName, DSQ, Finish (Total Seconds)]</span><br/><span class="error">E   [left]:  [Int64, Int64, float64, object, object, object, object, category, timedelta64[ns], Int64, object, object, object, bool, float64]</span><br/><span class="error">E   [right]: [Int64, Int64, float64, object, object, object, object, category, timedelta64[ns], Int64, object, object, object, bool, float64]</span><br/><br/>pandas\_libs\testing.pyx:168: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="failed results-table-row">
+        <tr>
+          <td class="col-result">Failed</td>
+          <td class="col-name">tests/test_london_scraper_output.py::test_category_values</td>
+          <td class="col-duration">2.80</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">scraper_output =         Place (Overall)  ...  Finish (Total Seconds)<br/>0                     1  ...                  7480.0<br/>1           ...    23146  ...                 17269.0<br/>388547             &lt;NA&gt;  ...                     NaN<br/><br/>[388548 rows x 15 columns]<br/><br/>    def test_category_values(scraper_output):<br/>        results = scraper_output<br/>    <br/>        exp_categories = [<br/>            &quot;18-39&quot;,<br/>            &quot;40-44&quot;,<br/>            &quot;45-49&quot;,<br/>            &quot;50-54&quot;,<br/>            &quot;55-59&quot;,<br/>            &quot;60-64&quot;,<br/>            &quot;65-69&quot;,<br/>            &quot;70-74&quot;,<br/>            &quot;75-79&quot;,<br/>        ]<br/>        actual_categories = results[&quot;Category&quot;].unique().tolist()<br/>    <br/>&gt;       assert all(<br/>            cat in exp_categories for cat in actual_categories<br/>        ), &quot;Unexpected Category value&quot;<br/><span class="error">E       AssertionError: Unexpected Category value</span><br/><span class="error">E       assert False</span><br/><span class="error">E        +  where False = all(&lt;generator object test_category_values.&lt;locals&gt;.&lt;genexpr&gt; at 0x00000248DC160DD0&gt;)</span><br/><br/>tests\test_london_scraper_output.py:118: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_london_scraper_output.py::test_sex_values</td>
+          <td class="col-duration">2.76</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_london_scraper_output.py::test_finish_values</td>
+          <td class="col-duration">2.79</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_london_scraper_output.py::test_year_values</td>
+          <td class="col-duration">3.17</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
