@@ -148,5 +148,16 @@ def test_finish_values(scraper_output):
     ), "Actual Finish time mainimum greater than expected"
 
 
+def test_year_values(scraper_output):
+    results = scraper_output
+
+    exp_year_vals = list(range(2011, 2022))
+    actual_year_vals = list(results["Year"].unique())
+
+    assert all(
+        year in exp_year_vals for year in actual_year_vals
+    ), "Unexpected value for Year"
+
+
 if __name__ == "__main__":
     pytest.main()

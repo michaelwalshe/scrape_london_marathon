@@ -15,6 +15,8 @@ dependencies:
   - pytest-cov
   - pytest-regressions
   - pytest-html
+  - coverage
+  - requests-mock
 
   # Core scientific modules
   - numpy

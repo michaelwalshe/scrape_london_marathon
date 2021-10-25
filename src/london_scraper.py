@@ -31,6 +31,7 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         row_indexes = [0, 1, 2, 3, 4, 5, 6, 8]
 
     site = requests.get(url).text
+
     # Soup strainer restricts content to speed up soup
     # Annoyingly need to check year several times for different layouts (eval() broke)
     if year >= 2019:
@@ -80,7 +81,10 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
             }
             my_table.append(data_item)
 
-    results = pd.DataFrame(my_table).iloc[1:]  # Strip table header
+    if year >= 2019:
+        results = pd.DataFrame(my_table).iloc[1:]  # Strip table header
+    else:
+        results = pd.DataFrame(my_table)
 
     return results
 
