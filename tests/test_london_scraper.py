@@ -22,7 +22,7 @@ def test_get_urls():
     assert actual_urls == expected_urls
 
 
-@pytest.mark.xfail("Pandas testing module failing on unexpected characters")
+@pytest.mark.xfail(reason="Pandas testing module failing on unexpected characters")
 def test_sample_html(requests_mock):
     url = (
         "https://results.virginmoneylondonmarathon.com/2018/?page=1&event=ALL&num_"
@@ -31,13 +31,13 @@ def test_sample_html(requests_mock):
     )
 
     example_results = pd.read_csv(
-        "./tests/inputs/london_2018_exp_output.csv", dtype='object', encoding="utf-8"
+        "./tests/inputs/london_2018_exp_output.csv", dtype="object", encoding="utf-8"
     )
 
-    with open('./tests/inputs/Virgin Money London Marathon 2018.html') as f:
+    with open("./tests/inputs/Virgin Money London Marathon 2018.html") as f:
         # Replace html request with saved file for test
         requests_mock.get(url, text=f.read())
-        results = london_scraper.get_results_table(url, 'M', 2018)
+        results = london_scraper.get_results_table(url, "M", 2018)
 
     pd.testing.assert_frame_equal(results, example_results)
 

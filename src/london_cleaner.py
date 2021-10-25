@@ -3,9 +3,15 @@ import numpy as np
 
 
 def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
-    """London cleaner"""
+    """Clean the output from scraping the london marathon website.
 
-    # Some data cleaning
+    Args:
+        results: The dataframe of results
+
+    Returns:
+        The cleaned dataframe
+    """
+
     # Remove leftover titles
     results["Club"] = results["Club"].str.replace("Club", "", regex=False)
     results["Running Number"] = results["Running Number"].str.replace(
@@ -28,10 +34,13 @@ def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
     results["Name"] = results["Name"].str.replace(r"(»)", "", regex=True)
     results["Name"] = results["Name"].str.replace(r"(\n)", "", regex=True)
     last_first = results["Name"].str.split(pat=",", n=1, expand=True)
-    results["FirstName"], results["LastName"] = last_first[1], last_first[0]
+    results["FirstName"], results["LastName"] = (
+        last_first[1].str.strip(),
+        last_first[0].str.strip(),
+    )
     # Remove comma from Name column, so that this can be saved as a CSV
     # Must happen after splitting Name into two cols!!
-    results["Name"] = results["Name"].str.replace(r"(\,)", "", regex=True)
+    results["Name"] = results["Name"].str.replace(r"(\,)", "", regex=True).str.strip()
 
     # Change W to F for 2020
     results["Sex"] = results["Sex"].str.replace("W", "F")

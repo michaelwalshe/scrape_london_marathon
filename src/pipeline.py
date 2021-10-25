@@ -41,20 +41,23 @@ def main():
     print('"Testing scraper outputs')
     return_code = pytest.main(
         [
-            "./tests/test_london_scraper.py",
+            "./tests/test_london_scraper_output.py",
             f"--html=./tests/reports/scraper_report_{start_time}.html",
             "--self-contained-html",
         ]
     )
     if return_code != 0:
-        raise RuntimeError("Output tests failing, check ....")
+        raise RuntimeError(
+            f"Output tests failing, check scraper_report_{start_time}.html"
+        )
+    # If no failing tests then pass
 
     # Rename temp CSV to actual
     shutil.copy(
         "./data/london_marathon_latest.csv",
         f"./data/london_marathon_{start_time}.csv",
     )
-    # If no failing tests, then....
+
     # Now for very basic plots/analysis
     london_plotter.main(f"london_marathon_{start_time}")
 
