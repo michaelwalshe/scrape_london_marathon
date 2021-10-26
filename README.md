@@ -1,5 +1,5 @@
 # Scraping the Virgin London Marathon
-[![Build and Test](https://github.com/michaelwalshe/scrape_london_marathon/actions/workflows/python-app.yml/badge.svg)](https://github.com/michaelwalshe/scrape_london_marathon/actions)
+[![Build and Test](https://github.com/michaelwalshe/scrape_london_marathon/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/michaelwalshe/scrape_london_marathon/actions)
 
 
 The Virgin London Marathon website provides a webpage showing the results for each year. The underlying dataset is not publicly available, but as there are only slight changes in the search interface each year it is possible to scrape the tables for each year.
