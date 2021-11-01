@@ -34,4 +34,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --ignore=W605,W503,E402 --max-line-length=88 --statistics
     - name: Test with pytest
       run: |
-        pytest --ignore-glob="*_output*.py" --cov=src --html=./tests/reports/push_report.html --self-contained-html
+        pytest -o --html=./tests/reports/push_report.html
