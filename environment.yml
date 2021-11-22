@@ -43,3 +43,7 @@ dependencies:
 
   # Data engineering
   - sqlalchemy
+  - pyarrow
+  
+  # Data testing
+  - great-expectations

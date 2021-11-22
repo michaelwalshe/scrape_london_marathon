@@ -117,9 +117,12 @@ def test_output_attributes(scraper_output):
     )
 
     exp_rows_min = 1000  # One sex for one year should give at least this many
+    exp_rows_max = 1000000 # All results so far are less than 1M
+
 
     assert exp_cols == list(results.columns), "Expected columns not found"
     assert exp_rows_min <= results.shape[0], "Less than minimum expected number of rows"
+    assert exp_rows_max >= results.shape[1], "More than max expectected number of rows"
 
     assert exp_dtypes.values.tolist() == results.dtypes.values.tolist()
 
@@ -192,3 +195,9 @@ def test_year_values(scraper_output):
 
 if __name__ == "__main__":
     pytest.main()
+
+    # pytest.main(
+    #     [
+    #         "./tests/test_london_scraper_output.py",
+    #     ]
+    # )

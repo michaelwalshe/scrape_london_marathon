@@ -1,0 +1,348 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "london_2021.csv.warning",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column_list": [
+          "Place (Overall)",
+          "Place (Gender)",
+          "Place (Category)",
+          "Name",
+          "Sex",
+          "Club",
+          "Running Number",
+          "Category",
+          "Finish",
+          "Year",
+          "Country",
+          "FirstName",
+          "LastName",
+          "DSQ",
+          "Finish (Total Seconds)"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "max_value": 41601,
+        "min_value": 41601
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_min_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "max_value": 1.0,
+        "min_value": 1.0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_max_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "max_value": 35879.0,
+        "min_value": 35879.0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_mean_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "max_value": 17939.998188355305,
+        "min_value": 17939.998188355305
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_median_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "max_value": 17940.0,
+        "min_value": 17940.0
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_quantile_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "allow_relative_error": "lower",
+        "column": "Place (Overall)",
+        "quantile_ranges": {
+          "quantiles": [
+            0.05,
+            0.25,
+            0.5,
+            0.75,
+            0.95
+          ],
+          "value_ranges": [
+            [
+              1794.0,
+              1794.0
+            ],
+            [
+              8970.0,
+              8970.0
+            ],
+            [
+              17940.0,
+              17940.0
+            ],
+            [
+              26909.0,
+              26909.0
+            ],
+            [
+              34085.0,
+              34085.0
+            ]
+          ]
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "mostly": 0.86
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "max_value": 0.9982162267621728,
+        "min_value": 0.9982162267621728
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Place (Overall)",
+        "type_list": [
+          "FLOAT",
+          "FLOAT4",
+          "FLOAT8",
+          "FLOAT64",
+          "DOUBLE",
+          "DOUBLE_PRECISION",
+          "NUMERIC",
+          "FloatType",
+          "DoubleType",
+          "float",
+          "float_",
+          "float16",
+          "float32",
+          "float64",
+          "number",
+          "DECIMAL",
+          "REAL"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Name"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Name",
+        "max_value": 0.9612268935842888,
+        "min_value": 0.9612268935842888
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "Name",
+        "type_list": [
+          "CHAR",
+          "NCHAR",
+          "VARCHAR",
+          "NVARCHAR",
+          "TEXT",
+          "NTEXT",
+          "STRING",
+          "StringType",
+          "string",
+          "str",
+          "object",
+          "dtype('O')"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "FirstName",
+        "mostly": 0.99
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "FirstName",
+        "max_value": 0.15274405634750834,
+        "min_value": 0.15274405634750834
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "FirstName",
+        "type_list": [
+          "CHAR",
+          "NCHAR",
+          "VARCHAR",
+          "NVARCHAR",
+          "TEXT",
+          "NTEXT",
+          "STRING",
+          "StringType",
+          "string",
+          "str",
+          "object",
+          "dtype('O')"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "LastName"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "LastName",
+        "max_value": 0.43900387009927644,
+        "min_value": 0.43900387009927644
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "LastName",
+        "type_list": [
+          "CHAR",
+          "NCHAR",
+          "VARCHAR",
+          "NVARCHAR",
+          "TEXT",
+          "NTEXT",
+          "STRING",
+          "StringType",
+          "string",
+          "str",
+          "object",
+          "dtype('O')"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "DSQ",
+        "value_set": [
+          false
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "DSQ"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "DSQ",
+        "max_value": 2.4037883704718638e-05,
+        "min_value": 2.4037883704718638e-05
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_type_list",
+      "ge_cloud_id": null,
+      "kwargs": {
+        "column": "DSQ",
+        "type_list": [
+          "BOOLEAN",
+          "boolean",
+          "BOOL",
+          "TINYINT",
+          "BIT",
+          "bool",
+          "BooleanType"
+        ]
+      },
+      "meta": {}
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "citations": [
+      {
+        "batch_request": {
+          "data_asset_name": "london_2021.csv",
+          "data_connector_name": "default_inferred_data_connector_name",
+          "datasource_name": "london_data",
+          "limit": 1000
+        },
+        "citation_date": "2021-11-18T14:13:49.241821Z",
+        "comment": "Created suite added via CLI"
+      }
+    ],
+    "great_expectations_version": "0.13.42"
+  }
+}
