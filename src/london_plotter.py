@@ -11,7 +11,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
 
+from autologging import logged, traced
 
+
+@traced
+@logged
 def main(filename):
     results = pd.read_csv(
         f"./data/{filename}.csv",

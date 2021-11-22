@@ -4,20 +4,29 @@ import sys
 import pandas as pd
 import pytest
 
+from autologging import logged, traced
+
 sys.path.extend([".", ".."])
 from src import (
     params,
     london_scraper,
     london_cleaner,
     london_plotter,
+    logger
+)
+
+main_log = logger.setup_pipeline_level_logger(
+    file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}.log"
 )
 
 
+@traced
+@logged
 def main():
     # Setup reporting variables
     start_time = time.strftime("%Y%m%d-%H%M%S")
 
-    print("Generating URLS...")
+    main._log.info("Generating URLS...")
     urls = london_scraper.generate_virgin_urls(params.pages)
 
     # Warning: Takes ~10mins to complete!
@@ -25,10 +34,10 @@ def main():
     # Data is a list of dataframes, one for each year
     data = london_scraper.run_concurrent_scraping(urls)
 
-    print("Concatenating data...")
+    main._log.info("Concatenating data...")
     results = pd.concat(data)
 
-    print("Cleaning data...")
+    main._log.info("Cleaning data...")
     results = london_cleaner.london_cleaner(results)
 
     # And save them in a temp csv to then test
@@ -38,7 +47,7 @@ def main():
         header=True,
     )
 
-    print("Testing scraper outputs...")
+    main._log.info("Testing scraper outputs...")
     return_code = pytest.main(
         [
             "./tests/test_london_scraper_output.py",
@@ -50,7 +59,8 @@ def main():
         raise RuntimeError(
             f"Output tests failing, check scraper_report_{start_time}.html"
         )
-    # If no failing tests then pass
+    else:
+        main._log.info("All tests passing")
 
     # Rename temp CSV to actual
     shutil.copy(

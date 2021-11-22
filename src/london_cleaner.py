@@ -1,7 +1,11 @@
 import pandas as pd
 import numpy as np
 
+from autologging import logged, traced
 
+
+@traced
+@logged
 def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
     """Clean the output from scraping the london marathon website.
 
