@@ -50,7 +50,7 @@ def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
     results["Sex"] = results["Sex"].str.replace("W", "F")
 
     # Change category NaN to unknown
-    results['Category'] = results['Category'].fillna('Unknown')
+    results["Category"] = results["Category"].fillna("Unknown")
 
     # Create DSQ column for did not finish results,
     # to avoid removing info when using nan
