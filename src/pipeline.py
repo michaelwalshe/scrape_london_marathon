@@ -7,25 +7,21 @@ import pytest
 from autologging import logged, traced
 
 sys.path.extend([".", ".."])
-from src import (
-    params,
-    london_scraper,
-    london_cleaner,
-    london_plotter,
-    mylogger
-)
+from src import params, london_scraper, london_cleaner, london_plotter, mylogger
 
 # Initialise log
-logger = mylogger.setup_pipeline_level_logger(
+logger = mylogger.setup_logger(
     # Setup file & path for log, ask for TRACE log as well
     file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
     trace_log=True,
+    # Request errors to be sent to log, this is default behaviour
+    catch_errors=True,
     # Below is email setup
     mailhost="amadeus-co-uk.mail.protection.outlook.com",
     fromaddr="process@amadeus.co.uk",
     toaddrs=["michael.walshe@amadeus.co.uk"],
     subject="Sample Log Mail",
-    secure=None
+    secure=None,
 )
 
 # Enable error catching

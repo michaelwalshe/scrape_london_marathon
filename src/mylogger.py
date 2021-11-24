@@ -5,14 +5,16 @@ import sys
 import autologging
 
 
-def setup_pipeline_level_logger(
-    file_name: str = None, trace_log: bool = False, **kwargs
+def setup_logger(
+    file_name: str = None, trace_log: bool = False, catch_errors: bool = True, **kwargs
 ) -> logging.Logger:
     """Create instance of overall logger
 
     Args:
         file_name: Optional, the name/path to the output logs, without a file extension
         trace_log: Optional, twhether to output a detailed TRACE log
+        catch_errors: Replace python standard sys.excepthook with a new exception
+            handler that sends them to the log.
         **kwargs: Arguments for logging.handlers.SMTPHandler
     """
 
@@ -57,6 +59,9 @@ def setup_pipeline_level_logger(
             trace_hdlr.setFormatter(formatter)
             trace_hdlr.setLevel(autologging.TRACE)
             logger.addHandler(trace_hdlr)
+
+    if catch_errors:
+        sys.excepthook = handle_exception
     return logger
 
 
@@ -71,9 +76,3 @@ def handle_exception(exc_type, exc_value, exc_traceback):
     logger = logging.getLogger()
 
     logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
-
-
-def catch_errors():
-    """Enable handle_exception to catch all exceptions and log"""
-    sys.excepthook = handle_exception
-    return None
