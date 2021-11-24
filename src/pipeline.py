@@ -7,11 +7,18 @@ import pytest
 from autologging import logged, traced
 
 sys.path.extend([".", ".."])
-from src import params, london_scraper, london_cleaner, london_plotter, logger
-
-main_log = logger.setup_pipeline_level_logger(
-    file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}.log"
+from src import (
+    params, london_scraper, london_cleaner, london_plotter, mylogger
 )
+
+# Initialise log
+logger = mylogger.setup_pipeline_level_logger(
+    file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
+    trace=True
+)
+
+# Enable error catching
+mylogger.catch_errors()
 
 
 @traced

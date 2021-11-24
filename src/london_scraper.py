@@ -16,7 +16,7 @@ import pandas as pd
 from autologging import logged, traced
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
 
-import params
+from src import params
 
 
 @traced
