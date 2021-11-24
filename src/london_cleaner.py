@@ -1,7 +1,11 @@
 import pandas as pd
 import numpy as np
 
+from autologging import logged, traced
 
+
+@traced
+@logged
 def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
     """Clean the output from scraping the london marathon website.
 
@@ -46,7 +50,7 @@ def london_cleaner(results: pd.DataFrame) -> pd.DataFrame():
     results["Sex"] = results["Sex"].str.replace("W", "F")
 
     # Change category NaN to unknown
-    results['Category'] = results['Category'].fillna('Unknown')
+    results["Category"] = results["Category"].fillna("Unknown")
 
     # Create DSQ column for did not finish results,
     # to avoid removing info when using nan

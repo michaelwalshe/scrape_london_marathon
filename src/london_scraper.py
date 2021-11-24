@@ -13,12 +13,14 @@ from typing import Optional, Union
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
 
 import pandas as pd
+from autologging import logged, traced
 from bs4 import BeautifulSoup, SoupStrainer  # navigate through web pages
 
-sys.path.append(".")
 from src import params
 
 
+@traced
+@logged
 def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     """Scrape london marathon"""
 
@@ -89,6 +91,8 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
     return results
 
 
+@traced
+@logged
 def get_results(url):
     """Function chooses what results func to apply.
     Used to allow single function for pool.map"""
@@ -97,14 +101,18 @@ def get_results(url):
     year = int(re.search(r"\.com/(\d{4})/", url).group(1))
     sex = re.search(r"sex%5D=(\w)", url).group(1)
     page = re.search(r"page=(.*?)&event=", url).group(1)
-    print(f"Getting results for {sex} in {year}, page {page}\n")
+    get_results._log.info(f"Getting results for {sex} in {year}, page {page}\n")
 
     data = get_results_table(url, sex, year)
 
-    print(f"Finished getting results for {sex} in {year}, page {page}\n")
+    get_results._log.info(
+        f"Finished getting results for {sex} in {year}, page {page}\n"
+    )
     return data
 
 
+@traced
+@logged
 def generate_virgin_urls(
     pages, years: Optional["list[int]"] = None, sexes: Union[list, tuple, None] = None
 ) -> list:
@@ -161,15 +169,19 @@ def generate_virgin_urls(
     return urls
 
 
+@traced
+@logged
 def run_concurrent_scraping(urls: "list[str]", MAX_THREADS=30) -> "list[pd.DataFrame]":
     threads = min(MAX_THREADS, len(urls))
-    print("Beginning data extract...")
+    run_concurrent_scraping._log.info("Beginning data extract...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         data = list(executor.map(get_results, urls))
 
     return data
 
 
+@traced
+@logged
 def main():
     """Main function that scrapes london marathon website."""
 
@@ -177,14 +189,14 @@ def main():
     # This was gathered semi manually, using code in params.py
     pages = params.pages
 
-    print("Generating URLS...")
+    main._log.info("Generating URLS...")
     urls = generate_virgin_urls(pages)
 
     # Warning: Takes ~10mins to complete!
     # Trying using multithreading instead of multiprocessing
     data = run_concurrent_scraping(urls)
 
-    print("Saving data")
+    main._log.info("Saving data")
     results = pd.concat(data)
 
     return results

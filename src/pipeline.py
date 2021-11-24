@@ -4,20 +4,41 @@ import sys
 import pandas as pd
 import pytest
 
+from autologging import logged, traced
+
 sys.path.extend([".", ".."])
 from src import (
     params,
     london_scraper,
     london_cleaner,
     london_plotter,
+    mylogger
 )
 
+# Initialise log
+logger = mylogger.setup_pipeline_level_logger(
+    # Setup file & path for log, ask for TRACE log as well
+    file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
+    trace_log=True,
+    # Below is email setup
+    mailhost="amadeus-co-uk.mail.protection.outlook.com",
+    fromaddr="process@amadeus.co.uk",
+    toaddrs=["michael.walshe@amadeus.co.uk"],
+    subject="Sample Log Mail",
+    secure=None
+)
 
+# Enable error catching
+mylogger.catch_errors()
+
+
+@traced
+@logged
 def main():
     # Setup reporting variables
     start_time = time.strftime("%Y%m%d-%H%M%S")
 
-    print("Generating URLS...")
+    main._log.info("Generating URLS...")
     urls = london_scraper.generate_virgin_urls(params.pages)
 
     # Warning: Takes ~10mins to complete!
@@ -25,10 +46,10 @@ def main():
     # Data is a list of dataframes, one for each year
     data = london_scraper.run_concurrent_scraping(urls)
 
-    print("Concatenating data...")
+    main._log.info("Concatenating data...")
     results = pd.concat(data)
 
-    print("Cleaning data...")
+    main._log.info("Cleaning data...")
     results = london_cleaner.london_cleaner(results)
 
     # And save them in a temp csv to then test
@@ -38,7 +59,7 @@ def main():
         header=True,
     )
 
-    print("Testing scraper outputs...")
+    main._log.info("Testing scraper outputs...")
     return_code = pytest.main(
         [
             "./tests/test_london_scraper_output.py",
@@ -50,7 +71,8 @@ def main():
         raise RuntimeError(
             f"Output tests failing, check scraper_report_{start_time}.html"
         )
-    # If no failing tests then pass
+    else:
+        main._log.info("All tests passing")
 
     # Rename temp CSV to actual
     shutil.copy(
