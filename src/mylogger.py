@@ -6,10 +6,15 @@ import autologging
 
 
 def setup_pipeline_level_logger(
-    file_name: str = None,
-    trace: bool = False
+    file_name: str = None, trace_log: bool = False, **kwargs
 ) -> logging.Logger:
-    """Create instance of overall logger"""
+    """Create instance of overall logger
+
+    Args:
+        file_name: Optional, the name/path to the output logs, without a file extension
+        trace_log: Optional, twhether to output a detailed TRACE log
+        **kwargs: Arguments for logging.handlers.SMTPHandler
+    """
 
     # Format and extended format to use in logger output
     basic_format = "%(asctime)s:%(levelname)s:%(name)s:%(funcName)s:%(message)s"
@@ -31,13 +36,7 @@ def setup_pipeline_level_logger(
 
     # Create an email handler for warnings, this will only output when
     # a warning occurs
-    email_hdlr = logging.handlers.SMTPHandler(
-        mailhost='amadeus-co-uk.mail.protection.outlook.com',
-        fromaddr='process@amadeus.co.uk',
-        toaddrs=['michael.walshe@amadeus.co.uk'],
-        subject='Sample Log Mail',
-        secure=None
-    )
+    email_hdlr = logging.handlers.SMTPHandler(**kwargs)
     formatter = logging.Formatter(trace_format)
     email_hdlr.setFormatter(formatter)
     email_hdlr.setLevel(logging.WARNING)
@@ -52,7 +51,7 @@ def setup_pipeline_level_logger(
         logger.addHandler(log_hdlr)
 
         # If setting up a TRACE log then add that handler
-        if trace:
+        if trace_log:
             trace_hdlr = logging.FileHandler(f"{file_name}_trace.log")
             formatter = logging.Formatter(trace_format)
             trace_hdlr.setFormatter(formatter)
