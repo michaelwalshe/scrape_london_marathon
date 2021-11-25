@@ -14,7 +14,7 @@ logger = mylogger.setup_logger(
     # Setup file & path for log, ask for TRACE log as well
     file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
     trace_log=True,
-    # Request errors to be sent to log, this is default behaviour
+    # Request errors to be sent to log (default behaviour for this logger)
     catch_errors=True,
     # Below is email setup
     mailhost="amadeus-co-uk.mail.protection.outlook.com",
@@ -23,9 +23,6 @@ logger = mylogger.setup_logger(
     subject="Sample Log Mail",
     secure=None,
 )
-
-# Enable error catching
-mylogger.catch_errors()
 
 
 @traced

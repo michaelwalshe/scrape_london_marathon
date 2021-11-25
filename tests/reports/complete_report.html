@@ -429,7 +429,7 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
 }
 </script>
     <h1>complete_report.html</h1>
-    <p>Report generated on 24-Nov-2021 at 13:59:14 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
+    <p>Report generated on 25-Nov-2021 at 10:19:59 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a> v3.1.1</p>
     <h2>Environment</h2>
     <table id="environment">
       <tr>
@@ -445,8 +445,8 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
         <td>Python</td>
         <td>3.8.12</td></tr></table>
     <h2>Summary</h2>
-    <p>0 tests ran in 0.99 seconds. </p>
-    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">0 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">0 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
+    <p>3 tests ran in 1.15 seconds. </p>
+    <p class="filter" hidden="true">(Un)check the boxes to filter the results.</p><input checked="true" class="filter" data-test-result="passed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="passed">2 passed</span>, <input checked="true" class="filter" data-test-result="skipped" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="skipped">0 skipped</span>, <input checked="true" class="filter" data-test-result="failed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="failed">0 failed</span>, <input checked="true" class="filter" data-test-result="error" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="error">0 errors</span>, <input checked="true" class="filter" data-test-result="xfailed" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xfailed">1 expected failures</span>, <input checked="true" class="filter" data-test-result="xpassed" disabled="true" hidden="true" name="filter_checkbox" onChange="filterTable(this)" type="checkbox"/><span class="xpassed">0 unexpected passes</span>
     <h2>Results</h2>
     <table id="results-table">
       <thead id="results-table-head">
@@ -456,4 +456,31 @@ function filterTable(elem) { // eslint-disable-line no-unused-vars
           <th class="sortable" col="duration">Duration</th>
           <th class="sortable links" col="links">Links</th></tr>
         <tr hidden="true" id="not-found-message">
-          <th colspan="4">No results found. Try to check the filters</th></tr></thead></table></body></html>
+          <th colspan="4">No results found. Try to check the filters</th></tr></thead>
+      <tbody class="xfailed results-table-row">
+        <tr>
+          <td class="col-result">XFailed</td>
+          <td class="col-name">tests/test_london_scraper.py::test_sample_html</td>
+          <td class="col-duration">0.05</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="log">requests_mock = &lt;requests_mock.mocker.Mocker object at 0x0000026C6F961490&gt;<br/><br/>    @pytest.mark.xfail(reason=&quot;Pandas testing module failing on unexpected characters&quot;)<br/>    def test_sample_html(requests_mock):<br/>        url = (<br/>            &quot;https://results.virginmoneylondonmarathon.com/2018/?page=1&amp;event=ALL&amp;num_&quot;<br/>            &quot;results=25&amp;pid=search&amp;pidp=results_nav&amp;search%5Bsex%5D=M&amp;search%5Bage_c&quot;<br/>            &quot;lass%5D=%25&amp;search%5Bnation%5D=%25&amp;search_sort=place&quot;<br/>        )<br/>    <br/>        example_results = pd.read_csv(<br/>            &quot;./tests/inputs/london_2018_exp_output.csv&quot;, dtype=&quot;object&quot;, encoding=&quot;utf-8&quot;<br/>        )<br/>    <br/>        with open(&quot;./tests/inputs/Virgin Money London Marathon 2018.html&quot;) as f:<br/>            # Replace html request with saved file for test<br/>            requests_mock.get(url, text=f.read())<br/>            results = london_scraper.get_results_table(url, &quot;M&quot;, 2018)<br/>    <br/>&gt;       pd.testing.assert_frame_equal(results, example_results)<br/><span class="error">E       AssertionError: DataFrame are different</span><br/><span class="error">E       </span><br/><span class="error">E       DataFrame shape mismatch</span><br/><span class="error">E       [left]:  (25, 10)</span><br/><span class="error">E       [right]: (25, 15)</span><br/><br/>tests\test_london_scraper.py:42: AssertionError<br/></div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_london_cleaner.py::test_london_cleaner</td>
+          <td class="col-duration">0.07</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody>
+      <tbody class="passed results-table-row">
+        <tr>
+          <td class="col-result">Passed</td>
+          <td class="col-name">tests/test_london_scraper.py::test_get_urls</td>
+          <td class="col-duration">0.00</td>
+          <td class="col-links"></td></tr>
+        <tr>
+          <td class="extra" colspan="4">
+            <div class="empty log">No log output captured.</div></td></tr></tbody></table></body></html>
