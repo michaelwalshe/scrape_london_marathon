@@ -5,6 +5,9 @@
 *.sas7bdat
 zip_*/
 
+# Test report
+auto_report.html
+
 # IDEs
 .vscode/
 .idea/
