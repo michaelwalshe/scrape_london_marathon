@@ -12,7 +12,7 @@ from src import params, london_scraper, london_cleaner, london_plotter, mylogger
 # Initialise log
 logger = mylogger.setup_logger(
     # Setup file & path for log, ask for TRACE log as well
-    file_name=f"./logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
+    file_name=f"{params.ROOT}/../logs/example_log_{time.strftime('%Y%m%d-%H%M%S')}",
     trace_log=True,
     # Request errors to be sent to log (default behaviour for this logger)
     catch_errors=True,
@@ -47,7 +47,7 @@ def main():
 
     # And save them in a temp csv to then test
     results.to_csv(
-        "./data/london_marathon_latest.csv",
+        f"{params.ROOT}/../data/london_marathon_latest.csv",
         index=False,
         header=True,
     )
@@ -55,7 +55,7 @@ def main():
     main._log.info("Testing scraper outputs...")
     return_code = pytest.main(
         [
-            "./tests/test_london_scraper_output.py",
+            f"{params.ROOT}/../tests/test_london_scraper_output.py",
             f"--html=./tests/reports/scraper_report_{start_time}.html",
             "--self-contained-html",
         ]
@@ -66,11 +66,10 @@ def main():
         )
     else:
         main._log.info("All tests passing")
-
     # Rename temp CSV to actual
     shutil.copy(
-        "./data/london_marathon_latest.csv",
-        f"./data/london_marathon_{start_time}.csv",
+        f"{params.ROOT}/../data/london_marathon_latest.csv",
+        f"{params.ROOT}/../data/london_marathon_{start_time}.csv",
     )
 
     # Now for very basic plots/analysis

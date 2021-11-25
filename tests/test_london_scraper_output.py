@@ -7,7 +7,8 @@ from numpy import dtype
 from pandas import Int64Dtype, CategoricalDtype
 
 sys.path.extend(["..", "."])
-# from src.london_scraper import *
+from src.london_scraper import *
+from src import params
 
 
 @pytest.fixture()
@@ -16,7 +17,7 @@ def scraper_output():
     the latest output works. This reads in that data and provides it to
     pytest tests"""
     results = pd.read_csv(
-        "./data/london_marathon_latest.csv",
+        f"{params.ROOT}/../data/london_marathon_latest.csv",
         dtype={
             "Place (Overall)": "Int64",
             "Place (Gender)": "Int64",

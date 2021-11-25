@@ -1,3 +1,5 @@
+import sys
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -13,12 +15,15 @@ from sklearn import metrics
 
 from autologging import logged, traced
 
+sys.path.extend([".", ".."])
+from src import params
+
 
 @traced
 @logged
 def main(filename):
     results = pd.read_csv(
-        f"./data/{filename}.csv",
+        f"{params.ROOT}/../data/{filename}.csv",
         dtype={
             "Place (Overall)": "Int64",
             "Place (Gender)": "Int64",
@@ -42,7 +47,7 @@ def main(filename):
 
     # Basic plotting
     sns.violinplot(data=results, x="Sex", y="Finish (Total Seconds)")
-    plt.savefig("./plots/london_violin.png")
+    plt.savefig(f"{params.ROOT}/../plots/london_violin.png")
 
     # Try explanatory linear regression with statsmodels
     mod = smf.gls(

@@ -7,6 +7,7 @@ from pandas import Int64Dtype, CategoricalDtype
 
 sys.path.extend(["..", "."])
 from src.london_cleaner import london_cleaner
+from src import params
 
 
 def test_london_cleaner():

@@ -5,9 +5,8 @@ Author: Michael Walshe
 """
 
 import concurrent.futures  # to allow multithreading
-import requests
 import re
-import sys
+import requests
 from typing import Optional, Union
 
 # from multiprocessing import Pool, cpu_count  # to allow multiprocessing
@@ -31,7 +30,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         row_indexes = [0, 1, 2, 3, 5, 6, 7, 9]
     else:
         row_indexes = [0, 1, 2, 3, 4, 5, 6, 8]
-
     site = requests.get(url).text
 
     # Soup strainer restricts content to speed up soup
@@ -40,7 +38,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         strainer = SoupStrainer(class_="section-main")
     else:
         strainer = SoupStrainer("tbody")
-
     soup = BeautifulSoup(site, "lxml", parse_only=strainer)
 
     # Loop through each row and column to create a list of cells
@@ -50,7 +47,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
         row_search = soup.find_all(class_="list-group-item")
     else:
         row_search = soup.find_all("tr")
-
     for row in row_search:
         row_data = []
 
@@ -58,7 +54,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
             cell_search = row.find_all(class_="list-field")
         else:
             cell_search = row.find_all("td")
-
         for cell in cell_search:
             alt_text = cell.find("span")
             if year < 2019 and alt_text is not None:
@@ -66,7 +61,6 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
             else:
                 cell = cell.text
             row_data.append(cell)
-
         # If the row isn't empty, then create a dict of the row to create dataframe from
         if row_data:
             data_item = {
@@ -82,12 +76,10 @@ def get_results_table(url: str, sex: str, year: int) -> pd.DataFrame:
                 "Year": year,
             }
             my_table.append(data_item)
-
     if year >= 2019:
         results = pd.DataFrame(my_table).iloc[1:]  # Strip table header
     else:
         results = pd.DataFrame(my_table)
-
     return results
 
 
@@ -121,10 +113,8 @@ def generate_virgin_urls(
 
     if sexes is None:
         sexes = list(pages.keys())
-
     if years is None:
         years = [yr for yr in pages[sexes[0]].keys() if yr != 2020]
-
     urls = []
     for sex in sexes:
         urls_single_sex = []
@@ -143,7 +133,6 @@ def generate_virgin_urls(
                         + "&search%5Bage_class%5D=%25&search"
                         + "%5Bnation%5D=%25&search_sort=name"
                     )
-
                 elif year >= 2014:
                     url = (
                         "https://results.virginmoneylondonmarathon.com/"
@@ -154,7 +143,6 @@ def generate_virgin_urls(
                         + "Bage_class%5D=%25&search%5Bsex%5D="
                         + sex
                     )
-
                 elif year >= 2010:
                     url = (
                         "https://results.virginmoneylondonmarathon.com/"
@@ -171,12 +159,12 @@ def generate_virgin_urls(
 
 @traced
 @logged
-def run_concurrent_scraping(urls: "list[str]", MAX_THREADS=30) -> "list[pd.DataFrame]":
-    threads = min(MAX_THREADS, len(urls))
+def run_concurrent_scraping(urls: "list[str]", max_threads=30) -> "list[pd.DataFrame]":
+    """Run get_results on each URL concurrently, uses 30 threads at maximum"""
+    threads = min(max_threads, len(urls))
     run_concurrent_scraping._log.info("Beginning data extract...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
         data = list(executor.map(get_results, urls))
-
     return data
 
 

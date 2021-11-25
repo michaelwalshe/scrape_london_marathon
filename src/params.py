@@ -1,9 +1,13 @@
 """
 Global parameters for the pipeline
 """
+import os
 
 # Name of pipeline, used in Logger
 PIPELINE_NAME = "SCRAPE_LONDON_MARATHON"
+
+# Get root directory (with dirname) of the src module
+ROOT = os.path.dirname(__file__)
 
 # Mapping of year to no. of pages of results on the website
 pages_men = {2021: 1}
