@@ -9,6 +9,7 @@ dependencies:
   # Core usual modules
   - flake8
   - black
+  - autologging
 
   # Testing
   - pytest
@@ -43,7 +44,6 @@ dependencies:
 
   # Data engineering
   - sqlalchemy
-  - autologging
 
  # IDE
  -spyder-kernels=2.1
